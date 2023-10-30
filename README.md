@@ -1,6 +1,6 @@
 # Birb Service
 
-![vertx version](https://img.shields.io/badge/vert.x-4.4.6-purple.svg[link="https://vertx.io)
+[![vert.x](https://img.shields.io/badge/vert.x-4.4.6-purple.svg)](https://vertx.io)
 
 This birb application was generated using http://start.vertx.io
 
