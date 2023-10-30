@@ -131,7 +131,7 @@ grpcurl -plaintext -d '{"type": PIGEON}' -import-path ./proto -proto birb.proto 
 }
 ```
 
-== Building
+## Getting Started
 
 To build protobuf:
 ```
