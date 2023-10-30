@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package protobuf_schema.grpc;
+option java_multiple_files = true;
+option java_package = "com.birb.protobuf.grpc";
+option java_outer_classname = "BirbProto";
+
+enum BirbType {
+  UNKNOWN = 0;
+  COCKATIEL = 1;
+  LOVEBIRD = 2;
+  MYNAH = 3;
+  PIGEON = 4;
+}
+
+message Birb {
+  int64 id = 1;
+  string name = 2;
+  string sound = 3;
+  float volume = 4;
+  BirbType type = 5;
+}
+
+service BirbService {
+  rpc GetBirb (GetBirbRequest) returns (GetBirbResponse) {}
+  rpc GetBirbByType (GetBirbByTypeRequest) returns (GetBirbByTypebResponse) {}
+}
+
+message GetBirbRequest {
+  int64 id = 1;
+}
+
+message GetBirbResponse {
+  Birb birb = 1;
+}
+
+message GetBirbByTypeRequest {
+  BirbType type = 1;
+}
+
+message GetBirbByTypebResponse {
+  repeated Birb birb = 1;
+}
