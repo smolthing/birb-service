@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: birb-service
+  namespace: smolthing
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: birb-service
+  template:
+    metadata:
+      labels:
+        app: birb-service
+    spec:
+      containers:
+        - name: birb-service
+          image: mysmolthing/birb-service:1.0
+          ports:
+            - containerPort: 9000
