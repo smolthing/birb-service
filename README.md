@@ -152,3 +152,50 @@ To run your application:
 ```
 ./gradlew clean run
 ```
+
+
+# Run using Docker
+### Build a fat jar
+```
+./gradlew assemable
+```
+### Create a Docker image
+
+```
+➜  birb-service git:(main) ✗ docker login
+➜  birb-service git:(main) ✗ docker build -t mysmolthing/birb-service:1.0 .
+➜  birb-service git:(main) ✗ docker push mysmolthing/birb-service:1.0
+
+➜  birb-service git:(main) ✗ docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED         SIZE
+birb-service                  1.0       bb7e45e84d79   2 days ago      339MB
+```
+
+### Create Kubernetes namespace
+```
+➜  birb-service git:(main) ✗ kubectl create namespace smolthing
+namespace/smolthing created
+➜  birb-service git:(main) ✗ kubectl get namespaces
+
+NAME              STATUS   AGE
+default           Active   208d
+kube-node-lease   Active   208d
+kube-public       Active   208d
+kube-system       Active   208d
+smolthing         Active   13s
+➜  birb-service git:(main) ✗ kubectl apply -f deploy/deployment.yml -n smolthing
+
+deployment.apps/birb-service created
+
+```
+### Expose Kubernetes portq
+```
+➜  birb-service git:(main) ✗ kubectl get pods
+NAME                           READY   STATUS    RESTARTS        AGE
+birb-service-8584574d7-h2tdt   1/1     Running   0               16s
+birb-service-8584574d7-mkp8z   1/1     Running   0               16s
+
+➜  birb-service git:(main) ✗ kubectl port-forward birb-service-8584574d7-h2tdt 9000:9000
+Forwarding from 127.0.0.1:9000 -> 9000
+Forwarding from [::1]:9000 -> 9000
+```
