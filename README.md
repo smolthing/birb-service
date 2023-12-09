@@ -210,3 +210,11 @@ birb-service-8584574d7-mkp8z   1/1     Running   0               16s
 Forwarding from 127.0.0.1:9000 -> 9000
 Forwarding from [::1]:9000 -> 9000
 ```
+
+### Fly.io
+```
+fly launch
+fly deploy // redeploy after changes to fly.toml
+fly scale show // see scaling count
+fly scale count 1 // reduce to 1 to reduce usage eh
+```
