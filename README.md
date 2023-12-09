@@ -7,6 +7,17 @@ This birb application was generated using http://start.vertx.io
 -----------
 A gRPC service that provides methods to get birb information.
 
+### Deployed at https://birb-service.fly.dev
+![postman grpc request](./doc/images/postman.png)
+Call gRPC request using Postman, import protobuf from `./src/main/java/protp/Birb.proto`.
+
+GetBirbByType Request:
+```
+{
+    "type": "COCKATIEL"
+}
+```
+
 ## gRPC Methods
 
 | Methods               | Description                                                      |
