@@ -92,3 +92,11 @@ tasks.withType<Test> {
 tasks.withType<JavaExec> {
   args = listOf("run", mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$launcherClassName", "--on-redeploy=$doOnChange")
 }
+
+tasks.test {
+  useJUnitPlatform()
+  afterTest(KotlinClosure2<TestDescriptor, TestResult, Any>({ descriptor, result ->
+    val test = descriptor as org.gradle.api.internal.tasks.testing.TestDescriptorInternal
+    println("\n${test.className} [${test.classDisplayName}] > ${test.name} [${test.displayName}]: ${result.resultType}")
+  }))
+}
