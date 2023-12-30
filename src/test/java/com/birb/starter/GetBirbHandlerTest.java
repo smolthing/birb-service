@@ -1,6 +1,7 @@
 package com.birb.starter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.birb.protobuf.grpc.BirbServiceGrpc;
 import com.birb.protobuf.grpc.BirbServiceGrpc.BirbServiceFutureStub;
@@ -14,6 +15,7 @@ import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,6 +29,7 @@ public class GetBirbHandlerTest extends BaseGrpcHandlerTest {
   private static final long BIRB_ID = 1L;
 
   @Test
+  @DisplayName("should return response successfully using blocking stub")
   void testBirbHandlerWithBlockingStub(VertxTestContext testContext) {
     GetBirbResponse response = birbStub.getBirb(GetBirbRequest.newBuilder().setId(BIRB_ID).build());
     assertEquals(BIRB_ID, response.getBirb().getId());
@@ -35,6 +38,7 @@ public class GetBirbHandlerTest extends BaseGrpcHandlerTest {
   }
 
   @Test
+  @DisplayName("should return response successfully using stub")
   void testBirbHandlerWithStub(VertxTestContext testContext) {
     BirbServiceGrpc.BirbServiceStub birbStub = BirbServiceGrpc.newStub(channel);
 
@@ -60,6 +64,7 @@ public class GetBirbHandlerTest extends BaseGrpcHandlerTest {
   }
 
   @Test
+  @DisplayName("should return response successfully using future stub")
   void testBirbHandlerWithFutureStub(VertxTestContext testContext)
     throws ExecutionException, InterruptedException {
     BirbServiceFutureStub birbStub = BirbServiceGrpc.newFutureStub(channel);
@@ -80,14 +85,14 @@ public class GetBirbHandlerTest extends BaseGrpcHandlerTest {
       Arguments.of(GetBirbRequest.newBuilder().setId(100).build())
     );
   }
-  @ParameterizedTest
+  @ParameterizedTest(name = "should return NOT FOUND error for request {0}")
   @MethodSource("testGetBirbHandlerErrorNotFound_Source")
   void testGetBirbHandlerErrorNotFound(GetBirbRequest request, VertxTestContext testContext) {
-    try {
+    StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
       birbStub.getBirb(request);
-    } catch (StatusRuntimeException e) {
-      assertEquals(Status.NOT_FOUND.getCode(), e.getStatus().getCode());
-    }
+    }, "Exception occurred while invoking birbStub.getBirb");
+
+    assertEquals(Status.NOT_FOUND.getCode(), exception.getStatus().getCode());
     testContext.completeNow();
   }
 }

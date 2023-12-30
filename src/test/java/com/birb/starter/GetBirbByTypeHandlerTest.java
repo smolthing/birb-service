@@ -1,6 +1,7 @@
 package com.birb.starter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.birb.protobuf.grpc.Birb;
 import com.birb.protobuf.grpc.BirbType;
@@ -11,6 +12,7 @@ import io.grpc.StatusRuntimeException;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +25,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class GetBirbByTypeHandlerTest extends BaseGrpcHandlerTest {
 
   @Test
+  @DisplayName("should return birb by type successfully")
   void testGetBirbByTypeHandler(VertxTestContext testContext) {
     GetBirbByTypebResponse response = birbStub.getBirbByType(
       GetBirbByTypeRequest.newBuilder().setType(BirbType.COCKATIEL).build());
@@ -48,25 +51,25 @@ public class GetBirbByTypeHandlerTest extends BaseGrpcHandlerTest {
       Arguments.of(GetBirbByTypeRequest.newBuilder().setTypeValue(-1).build())
     );
   }
-  @ParameterizedTest
+  @ParameterizedTest(name = "should return NOT FOUND error for request {0}")
   @MethodSource("testGetBirbTypeHandlerErrorNotFound_Source")
   void testGetBirbTypeHandlerErrorNotFoundWithMethodSource(GetBirbByTypeRequest request, VertxTestContext testContext) {
-    try {
+    StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
       birbStub.getBirbByType(request);
-    } catch (StatusRuntimeException e) {
-      assertEquals(Status.NOT_FOUND.getCode(), e.getStatus().getCode());
-    }
+    }, "Exception occurred while invoking birbStub.getBirbByType");
+
+    assertEquals(Status.NOT_FOUND.getCode(), exception.getStatus().getCode());
     testContext.completeNow();
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "should return NOT FOUND error for type {0}")
   @ValueSource(ints = {-1, 0})
   void testGetBirbTypeHandlerByErrorNotFoundWithValueSource(int type, VertxTestContext testContext) {
-    try {
+    StatusRuntimeException exception = assertThrows(StatusRuntimeException.class, () -> {
       birbStub.getBirbByType(GetBirbByTypeRequest.newBuilder().setTypeValue(type).build());
-    } catch (StatusRuntimeException e) {
-      assertEquals(Status.NOT_FOUND.getCode(), e.getStatus().getCode());
-    }
+    }, "Exception occurred while invoking birbStub.getBirbByType");
+
+    assertEquals(Status.NOT_FOUND.getCode(), exception.getStatus().getCode());
     testContext.completeNow();
   }
 }
