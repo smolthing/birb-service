@@ -4,7 +4,6 @@ import com.birb.protobuf.grpc.Birb;
 import com.birb.protobuf.grpc.BirbServiceGrpc;
 import com.birb.protobuf.grpc.BirbType;
 import com.birb.protobuf.grpc.GetBirbByTypebResponse;
-import com.birb.protobuf.grpc.GetBirbResponse;
 import io.vertx.grpc.common.GrpcStatus;
 import io.vertx.grpc.server.GrpcServer;
 import java.util.HashMap;

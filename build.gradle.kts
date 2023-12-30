@@ -31,13 +31,16 @@ application {
 
 dependencies {
   implementation(platform("io.vertx:vertx-stack-depchain:$vertxVersion"))
-  implementation("io.vertx:vertx-grpc-server")
+  implementation("io.vertx:vertx-grpc-server:${vertxVersion}")
+  implementation("io.vertx:vertx-grpc:${vertxVersion}")
+
   implementation("com.google.protobuf:protobuf-java:3.22.2")
   implementation("io.grpc:grpc-protobuf:1.53.0")
   implementation("javax.annotation:javax.annotation-api:1.3.2")
 
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
+  testImplementation("org.mockito:mockito-core:5.2.0")
 }
 
 java {
